@@ -60,4 +60,14 @@ public class Client extends Person {
             }
         });
     }
+
+    public static boolean delete(int id) {
+        String sql = "DELETE FROM clients WHERE id = ?";
+
+        return withStatement(sql, stmt -> {
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        });
+    }
 }

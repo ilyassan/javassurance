@@ -28,9 +28,13 @@ public class ClientService {
         return Client.find(id);
     }
 
-    public static String getClientFamilyName(Client client) {
-        return client.getFamilyName()
-                .map(name -> "Family Name: " + name)
-                .orElse("Family Name: Not provided");
+    public static boolean deleteById(int id) {
+        Client client = Client.find(id);
+        if (client != null) {
+            return Client.delete(id);
+        } else {
+            System.out.println("Client with ID " + id + " not found.");
+            return false;
+        }
     }
 }

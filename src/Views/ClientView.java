@@ -10,7 +10,8 @@ public class ClientView extends View {
         println("\n=== CLIENTS MANAGEMENT ===");
         println("1. Create Client");
         println("2. Search Client by ID");
-        println("3. Back to Main Menu");
+        println("3. Delete Client by ID");
+        println("4. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -44,7 +45,11 @@ public class ClientView extends View {
                         println("\n=== CLIENT FOUND ===");
                         println("ID: " + client.getId());
                         println("First Name: " + client.getFirstName());
-                        println(ClientService.getClientFamilyName(client));
+                        println(
+                                client.getFamilyName()
+                                        .map(name -> "Family Name: " + name)
+                                        .orElse("Family Name: Not provided")
+                        );
                         println("Email: " + client.getEmail());
                         println("Advisor ID: " + client.getAdvisorId());
                     } else {
@@ -55,6 +60,29 @@ public class ClientView extends View {
                 pauseBeforeMenu();
                 break;
             case 3:
+                print("Enter client ID to delete: ");
+                int deleteClientId = getIntInput();
+
+                if(deleteClientId != -1) {
+                    print("Are you sure you want to delete this client? (y/N): ");
+                    String confirmation = getStringInput();
+
+                    if(confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+                        boolean deleted = ClientService.deleteById(deleteClientId);
+
+                        if(deleted) {
+                            println("Client deleted successfully!");
+                        } else {
+                            println("Failed to delete client or client not found.");
+                        }
+                    } else {
+                        println("Deletion cancelled.");
+                    }
+                }
+
+                pauseBeforeMenu();
+                break;
+            case 4:
                 return;
             default:
                 println("Invalid choice");
