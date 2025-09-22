@@ -2,6 +2,7 @@ package Views;
 
 import Enums.ContractType;
 import Models.Client;
+import Models.Contract;
 import Services.ClientService;
 import Services.ContractService;
 
@@ -15,7 +16,8 @@ public class ContractView extends View {
     public static void showMenu() {
         println("\n=== CONTRACTS MANAGEMENT ===");
         println("1. Create Contract");
-        println("2. Back to Main Menu");
+        println("2. Search Contract by ID");
+        println("3. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -26,6 +28,10 @@ public class ContractView extends View {
                 pauseBeforeMenu();
                 break;
             case 2:
+                searchContract();
+                pauseBeforeMenu();
+                break;
+            case 3:
                 return;
             default:
                 println("Invalid choice");
@@ -65,6 +71,34 @@ public class ContractView extends View {
         if (client != null) {
             ContractService.create(contractType, startDate, endDate, client.getId());
             println("Contract created successfully!");
+        }
+    }
+
+    private static void searchContract() {
+        print("Enter contract ID: ");
+        int contractId = getIntInput();
+
+        if(contractId != -1) {
+            Contract contract = ContractService.findById(contractId);
+
+            if(contract != null) {
+                println("\n=== CONTRACT FOUND ===");
+                println("ID: " + contract.getId());
+                println("Type: " + contract.getType().name());
+                println("Start Date: " + contract.getStartDate());
+                println("End Date: " + (contract.getEndDate() != null ? contract.getEndDate() : "Not specified"));
+                println("Client ID: " + contract.getClientId());
+
+                // Also show client details
+                Client client = ClientService.findById(contract.getClientId());
+                if(client != null) {
+                    println("\n=== CLIENT DETAILS ===");
+                    println("Client Name: " + client.getFirstName() + " " + client.getFamilyName().orElse("[No family name]"));
+                    println("Client Email: " + client.getEmail());
+                }
+            } else {
+                println("Contract with ID " + contractId + " not found.");
+            }
         }
     }
 

@@ -76,4 +76,25 @@ public class Contract extends Model {
             return null;
         });
     }
+
+    public static Contract find(int id) {
+        String sql = "SELECT * FROM contracts WHERE id = ?";
+
+        return withStatement(sql, stmt -> {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Contract(
+                        rs.getInt("id"),
+                        ContractType.valueOf(rs.getString("type")),
+                        rs.getDate("start_date").toLocalDate(),
+                        rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null,
+                        rs.getInt("client_id")
+                );
+            } else {
+                return null;
+            }
+        });
+    }
 }

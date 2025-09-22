@@ -30,4 +30,8 @@ public class ContractService {
         Contract contract = new Contract(null, type, startDate, endDate, clientId);
         contract.create();
     }
+
+    public static Contract findById(int id) {
+        return Contract.find(id);
+    }
 }
