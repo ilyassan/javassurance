@@ -1,12 +1,10 @@
 package Models;
 
-import Enums.Role;
-
 public class Client extends Person {
     public Integer advisorId;
 
-    Client(String firstName, String lastName, String email, Integer advisorId) {
-        super(firstName, lastName, email, Role.CLIENT);
+    Client(Integer id, String firstName, String lastName, String email, Integer advisorId) {
+        super(id, firstName, lastName, email);
         this.advisorId = advisorId;
     }
 

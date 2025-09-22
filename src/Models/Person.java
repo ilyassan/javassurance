@@ -1,19 +1,16 @@
 package Models;
 
-import Enums.Role;
-
-public abstract class Person {
+public abstract class Person extends Model {
     public Integer id;
     public String firstName;
     public String lastName;
     public String email;
-    public Role role;
 
-    Person(String firstName, String lastName, String email, Role role) {
+    Person(Integer id, String firstName, String lastName, String email) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.role = role;
     }
 
     public Integer getId() {
@@ -42,13 +39,5 @@ public abstract class Person {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 }
