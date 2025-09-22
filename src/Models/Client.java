@@ -1,6 +1,7 @@
 package Models;
 
 import java.sql.ResultSet;
+import java.util.Optional;
 
 public class Client extends Person {
     public Integer advisorId;
@@ -33,6 +34,10 @@ public class Client extends Person {
 
     public void setAdvisorId(Integer advisorId) {
         this.advisorId = advisorId;
+    }
+
+    public Optional<String> getFamilyName() {
+        return Optional.ofNullable(this.lastName);
     }
 
     public static Client find(int id) {

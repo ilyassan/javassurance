@@ -1,6 +1,7 @@
 package Services;
 
 import Models.Client;
+import java.util.Optional;
 
 public class ClientService {
 
@@ -25,5 +26,11 @@ public class ClientService {
 
     public static Client findById(int id) {
         return Client.find(id);
+    }
+
+    public static String getClientFamilyName(Client client) {
+        return client.getFamilyName()
+                .map(name -> "Family Name: " + name)
+                .orElse("Family Name: Not provided");
     }
 }

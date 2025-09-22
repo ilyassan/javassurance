@@ -43,7 +43,8 @@ public class ClientView extends View {
                     if(client != null) {
                         println("\n=== CLIENT FOUND ===");
                         println("ID: " + client.getId());
-                        println("Name: " + client.getFirstName() + " " + client.getLastName());
+                        println("First Name: " + client.getFirstName());
+                        println(ClientService.getClientFamilyName(client));
                         println("Email: " + client.getEmail());
                         println("Advisor ID: " + client.getAdvisorId());
                     } else {
