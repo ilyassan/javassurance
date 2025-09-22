@@ -3,6 +3,7 @@ package Views;
 import Models.Advisor;
 import Models.Client;
 import Services.ClientService;
+import java.util.List;
 
 public class ClientView extends View {
 
@@ -11,7 +12,8 @@ public class ClientView extends View {
         println("1. Create Client");
         println("2. Search Client by ID");
         println("3. Delete Client by ID");
-        println("4. Back to Main Menu");
+        println("4. Show All Clients (Ordered by Family Name)");
+        println("5. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -83,6 +85,30 @@ public class ClientView extends View {
                 pauseBeforeMenu();
                 break;
             case 4:
+                List<Client> clients = ClientService.getAllOrderedByFamilyName();
+
+                if(clients.isEmpty()) {
+                    println("No clients found.");
+                } else {
+                    println("\n=== ALL CLIENTS (Ordered by Family Name) ===");
+                    clients.stream()
+                            .forEach(client -> {
+                                println("--------------------");
+                                println("ID: " + client.getId());
+                                println("First Name: " + client.getFirstName());
+                                println(client.getFamilyName()
+                                        .map(name -> "Family Name: " + name)
+                                        .orElse("Family Name: Not provided"));
+                                println("Email: " + client.getEmail());
+                                println("Advisor ID: " + client.getAdvisorId());
+                            });
+                    println("--------------------");
+                    println("Total clients: " + clients.size());
+                }
+
+                pauseBeforeMenu();
+                break;
+            case 5:
                 return;
             default:
                 println("Invalid choice");

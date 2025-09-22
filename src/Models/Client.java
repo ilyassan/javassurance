@@ -1,6 +1,8 @@
 package Models;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Client extends Person {
@@ -68,6 +70,25 @@ public class Client extends Person {
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
+        });
+    }
+
+    public static List<Client> getAll() {
+        String sql = "SELECT * FROM clients";
+
+        return withStatement(sql, stmt -> {
+            ResultSet rs = stmt.executeQuery();
+            List<Client> clients = new ArrayList<>();
+            while (rs.next()) {
+                clients.add(new Client(
+                        rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getInt("advisor_id")
+                ));
+            }
+            return clients;
         });
     }
 }

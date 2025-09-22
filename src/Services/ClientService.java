@@ -1,7 +1,10 @@
 package Services;
 
 import Models.Client;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ClientService {
 
@@ -36,5 +39,13 @@ public class ClientService {
             System.out.println("Client with ID " + id + " not found.");
             return false;
         }
+    }
+
+    public static List<Client> getAllOrderedByFamilyName() {
+        return Client.getAll()
+                .stream()
+                .sorted(Comparator.comparing(client ->
+                    client.getFamilyName().orElse("ZZZ")))
+                .collect(Collectors.toList());
     }
 }
