@@ -1,19 +1,19 @@
 package Models;
 
 public abstract class Person extends Model {
-    public Integer id;
+    public String id;
     public String firstName;
     public String lastName;
     public String email;
 
-    Person(Integer id, String firstName, String lastName, String email) {
+    Person(String id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

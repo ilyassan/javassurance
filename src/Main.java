@@ -1,3 +1,5 @@
+import Views.ClientView;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -13,7 +15,9 @@ public class Main {
 
             switch (choice){
                 // Clients
-                case 1: break;
+                case 1:
+                    ClientView.showMenu();
+                    break;
                 // Contracts
                 case 2: break;
                 // Incidents

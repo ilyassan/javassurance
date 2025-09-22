@@ -4,20 +4,20 @@ import Enums.ContractType;
 import java.time.LocalDateTime;
 
 public class Contract {
-    public Integer id;
+    public String id;
     public ContractType type;
     public LocalDateTime startDate;
     public LocalDateTime endDate;
-    public Integer clientId;
+    public String clientId;
 
-    Contract(ContractType type, LocalDateTime startDate, LocalDateTime endDate, Integer clientId) {
+    public Contract(ContractType type, LocalDateTime startDate, LocalDateTime endDate, String clientId) {
         this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
         this.clientId = clientId;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -45,11 +45,11 @@ public class Contract {
         this.endDate = endDate;
     }
 
-    public Integer getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(Integer clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 }

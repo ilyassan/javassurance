@@ -1,10 +1,12 @@
 package Models;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Advisor extends Person {
 
-    Advisor(Integer id, String firstName, String lastName, String email) {
+    public Advisor(String id, String firstName, String lastName, String email) {
         super(id, firstName, lastName, email);
     }
 
@@ -17,24 +19,23 @@ public class Advisor extends Person {
             stmt.setString(3, this.email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("id");
+                return rs.getString("id");
             }
             return null;
         });
     }
 
     public static Advisor find(int id) {
-        Advisor found = new Advisor(null, null, null, null); // temp object to call base methods
 
         String sql = "SELECT * FROM advisors WHERE id = ?";
 
-        return found.withStatement(sql, stmt -> {
+        return withStatement(sql, stmt -> {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 return new Advisor(
-                        rs.getInt("id"),
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("email")
@@ -42,6 +43,24 @@ public class Advisor extends Person {
             } else {
                 return null; // Not found
             }
+        });
+    }
+
+    public static List<Advisor> getAll() {
+        String sql = "SELECT * FROM advisors";
+
+        return withStatement(sql, stmt -> {
+            ResultSet rs = stmt.executeQuery();
+            List<Advisor> advisors = new ArrayList<>();
+            while (rs.next()) {
+                advisors.add(new Advisor(
+                        rs.getString("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email")
+                ));
+            }
+            return advisors;
         });
     }
 }
