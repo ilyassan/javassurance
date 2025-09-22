@@ -9,7 +9,7 @@ public class ClientView extends View {
         println("\n=== CLIENTS MANAGEMENT ===");
         println("1. Create Client");
         println("2. Back to Main Menu");
-        print("Choose account type: ");
+        print("Enter your choice: ");
 
         int choice = getIntInput();
 
@@ -35,6 +35,5 @@ public class ClientView extends View {
             default:
                 println("Invalid choice");
         }
-
     }
 }

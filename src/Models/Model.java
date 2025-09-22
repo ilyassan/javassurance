@@ -11,7 +11,6 @@ public abstract class Model {
         return db.getConnection();
     }
 
-    // Functional interface to wrap PreparedStatement code
     public static interface StatementExecutor<T> {
         T apply(PreparedStatement stmt) throws SQLException;
     }

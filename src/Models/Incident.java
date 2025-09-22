@@ -5,14 +5,14 @@ import Enums.IncidentType;
 import java.time.LocalDateTime;
 
 public class Incident {
-    public String id;
+    public Integer id;
     public IncidentType type;
     public LocalDateTime date;
     public double cost;
     public String description;
-    public String contractId;
+    public Integer contractId;
 
-    public Incident(IncidentType type, LocalDateTime date, double cost, String description, String contractId) {
+    public Incident(IncidentType type, LocalDateTime date, double cost, String description, Integer contractId) {
         this.type = type;
         this.date = date;
         this.cost = cost;
@@ -20,7 +20,7 @@ public class Incident {
         this.contractId = contractId;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -56,11 +56,11 @@ public class Incident {
         this.description = description;
     }
 
-    public String getContractId() {
+    public Integer getContractId() {
         return contractId;
     }
 
-    public void setContractId(String contractId) {
+    public void setContractId(Integer contractId) {
         this.contractId = contractId;
     }
 }

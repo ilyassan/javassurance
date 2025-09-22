@@ -6,20 +6,21 @@ import java.util.List;
 
 public class Advisor extends Person {
 
-    public Advisor(String id, String firstName, String lastName, String email) {
+    public Advisor(Integer id, String firstName, String lastName, String email) {
         super(id, firstName, lastName, email);
     }
 
     public void create() {
-        String sql = "INSERT INTO advisors (first_name, last_name, email) VALUES (?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO advisors (first_name, last_name, email) VALUES (?, ?, ?)";
 
         this.id = withStatementReturning(sql, stmt -> {
             stmt.setString(1, this.firstName);
             stmt.setString(2, this.lastName);
             stmt.setString(3, this.email);
-            ResultSet rs = stmt.executeQuery();
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                return rs.getString("id");
+                return rs.getInt(1);
             }
             return null;
         });
@@ -35,7 +36,7 @@ public class Advisor extends Person {
 
             if (rs.next()) {
                 return new Advisor(
-                        rs.getString("id"),
+                        rs.getInt("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("email")
@@ -54,7 +55,7 @@ public class Advisor extends Person {
             List<Advisor> advisors = new ArrayList<>();
             while (rs.next()) {
                 advisors.add(new Advisor(
-                        rs.getString("id"),
+                        rs.getInt("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("email")

@@ -1,10 +1,10 @@
 package Services;
 
-import Models.Client;
+import Models.Advisor;
 
-public class ClientService {
+public class AdvisorService {
 
-    public static void create(String firstName, String lastName, String email, Integer advisorId) {
+    public static void create(String firstName, String lastName, String email) {
         // validate the client informations
         if(firstName.isEmpty()) {
             System.out.println("First Name cannot be empty");
@@ -15,11 +15,8 @@ public class ClientService {
         if(email.isEmpty()) {
             System.out.println("Email cannot be empty");
         }
-        if(advisorId == null) {
-            System.out.println("AdvisorId cannot be empty");
-        }
 
-        Client client = new Client(null, firstName, lastName, email, advisorId);
-        client.create();
+        Advisor advisor = new Advisor(null, firstName, lastName, email);
+        advisor.create();
     }
 }

@@ -7,12 +7,6 @@ public class DB {
     private final Connection connection;
 
     private DB() throws SQLException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("PostgreSQL JDBC Driver not found. Please add postgresql.jar to classpath.", e);
-        }
-
         String url = "jdbc:postgresql://localhost:5433/mydb";
         String user = "myuser";
         String password = "mypassword";

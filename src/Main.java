@@ -1,3 +1,4 @@
+import Views.AdvisorView;
 import Views.ClientView;
 
 import java.util.InputMismatchException;
@@ -19,7 +20,9 @@ public class Main {
                     ClientView.showMenu();
                     break;
                 // Contracts
-                case 2: break;
+                case 2:
+                    AdvisorView.showMenu();
+                    break;
                 // Incidents
                 case 3: break;
                 // Advisor
