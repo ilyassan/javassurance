@@ -34,4 +34,25 @@ public class Client extends Person {
     public void setAdvisorId(Integer advisorId) {
         this.advisorId = advisorId;
     }
+
+    public static Client find(int id) {
+        String sql = "SELECT * FROM clients WHERE id = ?";
+
+        return withStatement(sql, stmt -> {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Client(
+                        rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getInt("advisor_id")
+                );
+            } else {
+                return null;
+            }
+        });
+    }
 }

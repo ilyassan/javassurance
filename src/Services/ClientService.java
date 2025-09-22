@@ -22,4 +22,8 @@ public class ClientService {
         Client client = new Client(null, firstName, lastName, email, advisorId);
         client.create();
     }
+
+    public static Client findById(int id) {
+        return Client.find(id);
+    }
 }
