@@ -1,5 +1,6 @@
 import Views.AdvisorView;
 import Views.ClientView;
+import Views.ContractView;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,12 +22,14 @@ public class Main {
                     break;
                 // Contracts
                 case 2:
-                    AdvisorView.showMenu();
+                    ContractView.showMenu();
                     break;
                 // Incidents
                 case 3: break;
                 // Advisor
-                case 4: break;
+                case 4:
+                    AdvisorView.showMenu();
+                    break;
                 // Exit
                 case 5:
                     System.out.println("Thank you for using Javassurance!");
