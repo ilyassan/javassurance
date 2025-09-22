@@ -17,7 +17,8 @@ public class ContractView extends View {
         println("\n=== CONTRACTS MANAGEMENT ===");
         println("1. Create Contract");
         println("2. Search Contract by ID");
-        println("3. Back to Main Menu");
+        println("3. Delete Contract by ID");
+        println("4. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -32,6 +33,10 @@ public class ContractView extends View {
                 pauseBeforeMenu();
                 break;
             case 3:
+                deleteContract();
+                pauseBeforeMenu();
+                break;
+            case 4:
                 return;
             default:
                 println("Invalid choice");
@@ -98,6 +103,47 @@ public class ContractView extends View {
                 }
             } else {
                 println("Contract with ID " + contractId + " not found.");
+            }
+        }
+    }
+
+    private static void deleteContract() {
+        print("Enter contract ID to delete: ");
+        int deleteContractId = getIntInput();
+
+        if(deleteContractId != -1) {
+            // First show the contract details for confirmation
+            Contract contract = ContractService.findById(deleteContractId);
+
+            if(contract != null) {
+                println("\n=== CONTRACT TO DELETE ===");
+                println("ID: " + contract.getId());
+                println("Type: " + contract.getType().name());
+                println("Start Date: " + contract.getStartDate());
+                println("End Date: " + (contract.getEndDate() != null ? contract.getEndDate() : "Not specified"));
+
+                // Show client details
+                Client client = ClientService.findById(contract.getClientId());
+                if(client != null) {
+                    println("Client: " + client.getFirstName() + " " + client.getFamilyName().orElse("[No family name]"));
+                }
+
+                print("\nAre you sure you want to delete this contract? (y/N): ");
+                String confirmation = getStringInput();
+
+                if(confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+                    boolean deleted = ContractService.deleteById(deleteContractId);
+
+                    if(deleted) {
+                        println("Contract deleted successfully!");
+                    } else {
+                        println("Failed to delete contract.");
+                    }
+                } else {
+                    println("Deletion cancelled.");
+                }
+            } else {
+                println("Contract with ID " + deleteContractId + " not found.");
             }
         }
     }

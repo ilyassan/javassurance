@@ -97,4 +97,14 @@ public class Contract extends Model {
             }
         });
     }
+
+    public static boolean delete(int id) {
+        String sql = "DELETE FROM contracts WHERE id = ?";
+
+        return withStatement(sql, stmt -> {
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        });
+    }
 }

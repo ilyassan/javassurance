@@ -34,4 +34,14 @@ public class ContractService {
     public static Contract findById(int id) {
         return Contract.find(id);
     }
+
+    public static boolean deleteById(int id) {
+        Contract contract = Contract.find(id);
+        if (contract != null) {
+            return Contract.delete(id);
+        } else {
+            System.out.println("Contract with ID " + id + " not found.");
+            return false;
+        }
+    }
 }
