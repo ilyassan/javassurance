@@ -21,8 +21,9 @@ public class IncidentView extends View {
         println("2. Search Incident by ID");
         println("3. Delete Incident by ID");
         println("4. Total cost of Incidents of a client");
-        println("5. Show incidents of a specefic contract");
-        println("6. Back to Main Menu");
+        println("5. Show incidents of a specific client");
+        println("6. Show incidents of a specific contract");
+        println("7. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -45,10 +46,14 @@ public class IncidentView extends View {
                 pauseBeforeMenu();
                 break;
             case 5:
-                showIncidentsOfContract();
+                showIncidentsOfClient();
                 pauseBeforeMenu();
                 break;
             case 6:
+                showIncidentsOfContract();
+                pauseBeforeMenu();
+                break;
+            case 7:
                 return;
             default:
                 println("Invalid choice");
@@ -243,6 +248,27 @@ public class IncidentView extends View {
                     println("\n================");
                 });
     }
+
+    public static void showIncidentsOfClient() {
+        Client client = selectClient();
+        List<Integer> contractIds = ContractService.getContractsByClientId(client.getId())
+                .stream().map(contract -> contract.getId())
+                .collect(Collectors.toList());
+
+        println("\n================");
+        IncidentService.getAll().stream()
+                .filter(incident -> contractIds.contains(incident.getContractId()))
+                .forEach(incident -> {
+                    println("ID: " + incident.getId());
+                    println("Type: " + incident.getType().name());
+                    println("Date: " + incident.getDate());
+                    println("Description: " + incident.getDescription());
+                    println("Cost: " + incident.getCost());
+                    println("\n================");
+                });
+    }
+
+
 
     private static Client selectClient() {
         List<Client> clients = ClientService.getAllOrderedByFamilyName();
