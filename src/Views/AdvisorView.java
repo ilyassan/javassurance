@@ -13,8 +13,9 @@ public class AdvisorView extends View {
         println("\n=== ADVISORS MANAGEMENT ===");
         println("1. Create Advisor");
         println("2. Search Advisor by ID");
-        println("3. Show All Clients of an Advisor");
-        println("4. Back to Main Menu");
+        println("3. Delete Advisor by ID");
+        println("4. Show All Clients of an Advisor");
+        println("5. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -38,10 +39,14 @@ public class AdvisorView extends View {
                 pauseBeforeMenu();
                 break;
             case 3:
-                showClientsOfAdvisor();
+                deleteAdvisorById();
                 pauseBeforeMenu();
                 break;
             case 4:
+                showClientsOfAdvisor();
+                pauseBeforeMenu();
+                break;
+            case 5:
                 return;
             default:
                 println("Invalid choice");
@@ -120,6 +125,28 @@ public class AdvisorView extends View {
                 println("Email: " + advisor.getEmail());
             } else {
                 println("Advisor with ID " + advisorId + " not found.");
+            }
+        }
+    }
+
+    public static void deleteAdvisorById() {
+        print("Enter advisor ID to delete: ");
+        int deleteAdvisorId = getIntInput();
+
+        if (deleteAdvisorId != -1) {
+            print("Are you sure you want to delete this advisor? (y/N): ");
+            String confirmation = getStringInput();
+
+            if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+                boolean deleted = AdvisorService.deleteById(deleteAdvisorId);
+
+                if (deleted) {
+                    println("Advisor deleted successfully!");
+                } else {
+                    println("Failed to delete advisor or advisor not found.");
+                }
+            } else {
+                println("Deletion cancelled.");
             }
         }
     }

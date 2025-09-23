@@ -23,4 +23,14 @@ public class AdvisorService {
     public static Advisor findById(int id) {
         return Advisor.find(id);
     }
+
+    public static boolean deleteById(int id) {
+        Advisor advisor = Advisor.find(id);
+        if (advisor != null) {
+            return Advisor.delete(id);
+        } else {
+            System.out.println("Advisor with ID " + id + " not found.");
+            return false;
+        }
+    }
 }

@@ -64,4 +64,14 @@ public class Advisor extends Person {
             return advisors;
         });
     }
+
+    public static boolean delete(int id) {
+        String sql = "DELETE FROM advisors WHERE id = ?";
+
+        return withStatement(sql, stmt -> {
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        });
+    }
 }
