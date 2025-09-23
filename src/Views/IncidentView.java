@@ -18,6 +18,7 @@ public class IncidentView extends View {
         println("\n=== Incident MANAGEMENT ===");
         println("1. Create Incident");
         println("2. Search Incident by ID");
+        println("3. Delete Incident by ID");
         println("5. Back to Main Menu");
         print("Enter your choice: ");
 
@@ -33,6 +34,7 @@ public class IncidentView extends View {
                 pauseBeforeMenu();
                 break;
             case 3:
+                deleteIncident();
                 pauseBeforeMenu();
                 break;
             case 4:
@@ -159,6 +161,48 @@ public class IncidentView extends View {
             } else {
                 println("Incident with ID " + incidentId + " not found.");
             }
+        }
+    }
+
+    private static void deleteIncident() {
+        print("Enter incident ID to delete: ");
+        int deleteIncidentId = getIntInput();
+
+        // First show the incident details for confirmation
+        Incident incident = IncidentService.findById(deleteIncidentId);
+
+        if(incident != null) {
+            println("\n=== INCIDENT TO DELETE ===");
+            println("ID: " + incident.getId());
+            println("Type: " + incident.getType().name());
+            println("Date: " + incident.getDate());
+            println("Description: " + incident.getDescription());
+            println("Cost: " + incident.getCost());
+
+            // Show client details
+            Contract contract = ContractService.findById(incident.getContractId());
+            Client client = ClientService.findById(contract.getClientId());
+
+            if(client != null) {
+                println("Client: " + client.getFirstName() + " " + client.getFamilyName().orElse("[No family name]"));
+            }
+
+            print("\nAre you sure you want to delete this contract? (y/N): ");
+            String confirmation = getStringInput();
+
+            if(confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+                boolean deleted = IncidentService.deleteById(deleteIncidentId);
+
+                if(deleted) {
+                    println("Contract deleted successfully!");
+                } else {
+                    println("Failed to delete contract.");
+                }
+            } else {
+                println("Deletion cancelled.");
+            }
+        } else {
+            println("Contract with ID " + deleteIncidentId + " not found.");
         }
     }
 
