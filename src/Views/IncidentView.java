@@ -25,7 +25,8 @@ public class IncidentView extends View {
         println("5. Show incidents of a specific client");
         println("6. Show incidents of a specific contract");
         println("7. Show all incidents in descending order of cost");
-        println("8. Back to Main Menu");
+        println("8. Show all incidents in before a date");
+        println("9. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -60,6 +61,10 @@ public class IncidentView extends View {
                 pauseBeforeMenu();
                 break;
             case 8:
+                showIncidentsAfterADate();
+                pauseBeforeMenu();
+                break;
+            case 9:
                 return;
             default:
                 println("Invalid choice");
@@ -279,6 +284,29 @@ public class IncidentView extends View {
         println("\n================");
         IncidentService.getAll().stream()
                 .sorted(Comparator.comparing(Incident::getCost).reversed())
+                .forEach(incident -> {
+                    println("ID: " + incident.getId());
+                    println("Type: " + incident.getType().name());
+                    println("Date: " + incident.getDate());
+                    println("Description: " + incident.getDescription());
+                    println("Cost: " + incident.getCost());
+                    println("\n================");
+                });
+    }
+
+    public static void showIncidentsAfterADate() {
+        // enter date
+        print("Enter date (yyyy-MM-dd): ");
+        String enteredDate = getStringInput();
+        LocalDate date = parseDate(enteredDate);
+        if (date == null) {
+            println("Invalid date format. Please use yyyy-MM-dd");
+            return;
+        }
+
+        println("\n================");
+        IncidentService.getAll().stream()
+                .filter(incident -> date.isAfter(incident.getDate()))
                 .forEach(incident -> {
                     println("ID: " + incident.getId());
                     println("Type: " + incident.getType().name());
