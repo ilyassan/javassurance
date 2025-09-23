@@ -238,13 +238,4 @@ public class ContractView extends View {
             return null;
         }
     }
-
-    private static LocalDate parseDate(String dateStr) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            return LocalDate.parse(dateStr, formatter);
-        } catch (DateTimeParseException e) {
-            return null;
-        }
-    }
 }

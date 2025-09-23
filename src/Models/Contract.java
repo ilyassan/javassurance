@@ -129,4 +129,23 @@ public class Contract extends Model {
             return contracts;
         });
     }
+
+    public static List<Contract> getAll() {
+        String sql = "SELECT * FROM contracts";
+
+        return withStatement(sql, stmt -> {
+            ResultSet rs = stmt.executeQuery();
+            List<Contract> contracts = new ArrayList<>();
+            while (rs.next()) {
+                contracts.add(new Contract(
+                        rs.getInt("id"),
+                        ContractType.valueOf(rs.getString("type")),
+                        rs.getDate("start_date").toLocalDate(),
+                        rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null,
+                        rs.getInt("client_id")
+                ));
+            }
+            return contracts;
+        });
+    }
 }

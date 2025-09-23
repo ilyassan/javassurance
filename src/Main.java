@@ -1,6 +1,7 @@
 import Views.AdvisorView;
 import Views.ClientView;
 import Views.ContractView;
+import Views.IncidentView;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -25,7 +26,9 @@ public class Main {
                     ContractView.showMenu();
                     break;
                 // Incidents
-                case 3: break;
+                case 3:
+                    IncidentView.showMenu();
+                    break;
                 // Advisor
                 case 4:
                     AdvisorView.showMenu();

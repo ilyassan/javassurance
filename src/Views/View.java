@@ -1,5 +1,8 @@
 package Views;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -52,5 +55,14 @@ public abstract class View {
     public static void pauseBeforeMenu() {
         System.out.println("\nPress Enter to continue...");
         scanner.nextLine();
+    }
+
+    public static LocalDate parseDate(String dateStr) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return LocalDate.parse(dateStr, formatter);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
     }
 }

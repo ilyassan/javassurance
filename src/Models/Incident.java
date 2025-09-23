@@ -2,17 +2,19 @@ package Models;
 
 import Enums.IncidentType;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.time.LocalDate;
 
-public class Incident {
+public class Incident extends Model {
     public Integer id;
     public IncidentType type;
-    public LocalDateTime date;
+    public LocalDate date;
     public double cost;
     public String description;
     public Integer contractId;
 
-    public Incident(IncidentType type, LocalDateTime date, double cost, String description, Integer contractId) {
+    public Incident(Integer id, IncidentType type, LocalDate date, String description, double cost, Integer contractId) {
         this.type = type;
         this.date = date;
         this.cost = cost;
@@ -32,11 +34,11 @@ public class Incident {
         this.type = type;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -63,4 +65,26 @@ public class Incident {
     public void setContractId(Integer contractId) {
         this.contractId = contractId;
     }
+
+
+
+
+    public void create() {
+        String sql = "INSERT INTO incidents (type, date, description, cost, contract_id) VALUES (?, ?, ?, ?, ?)";
+
+        this.id = withStatementReturning(sql, stmt -> {
+            stmt.setString(1, this.type.name());
+            stmt.setDate(2, Date.valueOf(this.date));
+            stmt.setString(3, this.description);
+            stmt.setDouble(4, this.cost);
+            stmt.setInt(5, this.contractId);
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return null;
+        });
+    }
+
 }
