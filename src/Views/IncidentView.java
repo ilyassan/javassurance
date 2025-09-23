@@ -9,6 +9,7 @@ import Services.ContractService;
 import Services.IncidentService;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,7 +24,8 @@ public class IncidentView extends View {
         println("4. Total cost of Incidents of a client");
         println("5. Show incidents of a specific client");
         println("6. Show incidents of a specific contract");
-        println("7. Back to Main Menu");
+        println("7. Show all incidents in descending order of cost");
+        println("8. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -54,6 +56,10 @@ public class IncidentView extends View {
                 pauseBeforeMenu();
                 break;
             case 7:
+                showIncidentsInDescendingOrderOfCost();
+                pauseBeforeMenu();
+                break;
+            case 8:
                 return;
             default:
                 println("Invalid choice");
@@ -269,6 +275,19 @@ public class IncidentView extends View {
     }
 
 
+    public static void showIncidentsInDescendingOrderOfCost() {
+        println("\n================");
+        IncidentService.getAll().stream()
+                .sorted(Comparator.comparing(Incident::getCost).reversed())
+                .forEach(incident -> {
+                    println("ID: " + incident.getId());
+                    println("Type: " + incident.getType().name());
+                    println("Date: " + incident.getDate());
+                    println("Description: " + incident.getDescription());
+                    println("Cost: " + incident.getCost());
+                    println("\n================");
+                });
+    }
 
     private static Client selectClient() {
         List<Client> clients = ClientService.getAllOrderedByFamilyName();
