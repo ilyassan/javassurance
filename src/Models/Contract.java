@@ -4,6 +4,8 @@ import Enums.ContractType;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Contract extends Model {
     public Integer id;
@@ -105,6 +107,26 @@ public class Contract extends Model {
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
+        });
+    }
+
+    public static List<Contract> getByClientId(int clientId) {
+        String sql = "SELECT * FROM contracts WHERE client_id = ? ORDER BY start_date DESC";
+
+        return withStatement(sql, stmt -> {
+            stmt.setInt(1, clientId);
+            ResultSet rs = stmt.executeQuery();
+            List<Contract> contracts = new ArrayList<>();
+            while (rs.next()) {
+                contracts.add(new Contract(
+                        rs.getInt("id"),
+                        ContractType.valueOf(rs.getString("type")),
+                        rs.getDate("start_date").toLocalDate(),
+                        rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null,
+                        rs.getInt("client_id")
+                ));
+            }
+            return contracts;
         });
     }
 }

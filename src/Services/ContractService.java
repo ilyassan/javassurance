@@ -3,6 +3,7 @@ package Services;
 import Enums.ContractType;
 import Models.Contract;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ContractService {
 
@@ -43,5 +44,9 @@ public class ContractService {
             System.out.println("Contract with ID " + id + " not found.");
             return false;
         }
+    }
+
+    public static List<Contract> getContractsByClientId(int clientId) {
+        return Contract.getByClientId(clientId);
     }
 }

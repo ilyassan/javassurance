@@ -18,7 +18,8 @@ public class ContractView extends View {
         println("1. Create Contract");
         println("2. Search Contract by ID");
         println("3. Delete Contract by ID");
-        println("4. Back to Main Menu");
+        println("4. Show All Contracts of a Client");
+        println("5. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -37,6 +38,10 @@ public class ContractView extends View {
                 pauseBeforeMenu();
                 break;
             case 4:
+                showContractsByClient();
+                pauseBeforeMenu();
+                break;
+            case 5:
                 return;
             default:
                 println("Invalid choice");
@@ -144,6 +149,44 @@ public class ContractView extends View {
                 }
             } else {
                 println("Contract with ID " + deleteContractId + " not found.");
+            }
+        }
+    }
+
+    private static void showContractsByClient() {
+        // First, let user select a client
+        Client selectedClient = selectClient();
+
+        if(selectedClient != null) {
+            List<Contract> contracts = ContractService.getContractsByClientId(selectedClient.getId());
+
+            if(contracts.isEmpty()) {
+                println("No contracts found for client: " + selectedClient.getFirstName() + " " +
+                       selectedClient.getFamilyName().orElse("[No family name]"));
+            } else {
+                println("\n=== CONTRACTS FOR CLIENT: " + selectedClient.getFirstName() + " " +
+                       selectedClient.getFamilyName().orElse("[No family name]") + " ===");
+                println("Client Email: " + selectedClient.getEmail());
+                println("Total contracts: " + contracts.size());
+                println("\n--- CONTRACT DETAILS ---");
+
+                contracts.stream()
+                        .forEach(contract -> {
+                            println("--------------------");
+                            println("Contract ID: " + contract.getId());
+                            println("Type: " + contract.getType().name());
+                            println("Start Date: " + contract.getStartDate());
+                            println("End Date: " + (contract.getEndDate() != null ? contract.getEndDate() : "Not specified"));
+
+                            // Check if contract is active
+                            LocalDate today = LocalDate.now();
+                            boolean isActive = contract.getStartDate().isBefore(today) || contract.getStartDate().isEqual(today);
+                            if (contract.getEndDate() != null) {
+                                isActive = isActive && (contract.getEndDate().isAfter(today) || contract.getEndDate().isEqual(today));
+                            }
+                            println("Status: " + (isActive ? "ACTIVE" : "INACTIVE"));
+                        });
+                println("--------------------");
             }
         }
     }
