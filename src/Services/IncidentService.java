@@ -25,4 +25,7 @@ public class IncidentService {
         incident.create();
     }
 
+    public static Incident findById(int id) {
+        return Incident.find(id);
+    }
 }

@@ -1,5 +1,6 @@
 package Models;
 
+import Enums.ContractType;
 import Enums.IncidentType;
 
 import java.sql.Date;
@@ -67,8 +68,6 @@ public class Incident extends Model {
     }
 
 
-
-
     public void create() {
         String sql = "INSERT INTO incidents (type, date, description, cost, contract_id) VALUES (?, ?, ?, ?, ?)";
 
@@ -87,4 +86,25 @@ public class Incident extends Model {
         });
     }
 
+    public static Incident find(int id) {
+        String sql = "SELECT * FROM incidents WHERE id = ?";
+
+        return withStatement(sql, stmt -> {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Incident(
+                        rs.getInt("id"),
+                        IncidentType.valueOf(rs.getString("type")),
+                        rs.getDate("date").toLocalDate(),
+                        rs.getString("description"),
+                        rs.getInt("cost"),
+                        rs.getInt("contract_id")
+                );
+            } else {
+                return null;
+            }
+        });
+    }
 }

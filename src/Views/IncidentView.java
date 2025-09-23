@@ -3,6 +3,9 @@ package Views;
 import Enums.IncidentType;
 import Models.Client;
 import Models.Contract;
+import Models.Incident;
+import Services.ClientService;
+import Services.ContractService;
 import Services.IncidentService;
 
 import java.time.LocalDate;
@@ -14,6 +17,7 @@ public class IncidentView extends View {
     public static void showMenu() {
         println("\n=== Incident MANAGEMENT ===");
         println("1. Create Incident");
+        println("2. Search Incident by ID");
         println("5. Back to Main Menu");
         print("Enter your choice: ");
 
@@ -25,6 +29,7 @@ public class IncidentView extends View {
                 pauseBeforeMenu();
                 break;
             case 2:
+                searchIncident();
                 pauseBeforeMenu();
                 break;
             case 3:
@@ -41,7 +46,7 @@ public class IncidentView extends View {
     }
 
     private static void createIncident() {
-        // Select contract type
+        // Select incident type
         IncidentType incidentType = selectIncidentType();
         if (incidentType == null) {
             return;
@@ -80,7 +85,7 @@ public class IncidentView extends View {
         for (int i = 0; i < types.length; i++) {
             println((i + 1) + ". " + types[i].name());
         }
-        print("Select a contract type: ");
+        print("Select a incident type: ");
 
         int choice = getIntInput();
         if (choice >= 1 && choice <= types.length) {
@@ -127,4 +132,34 @@ public class IncidentView extends View {
             return null;
         }
     }
+
+    private static void searchIncident() {
+        print("Enter incident ID: ");
+        int incidentId = getIntInput();
+
+        if(incidentId != -1) {
+            Incident incident = IncidentService.findById(incidentId);
+
+            if(incident != null) {
+                println("\n=== INCIDENT FOUND ===");
+                println("ID: " + incident.getId());
+                println("Type: " + incident.getType().name());
+                println("Date: " + incident.getDate());
+                println("Description: " + incident.getDescription());
+                println("Cost: " + incident.getCost());
+
+                // Also show client details
+                Contract contract = ContractService.findById(incident.getContractId());
+                Client client = ClientService.findById(contract.getClientId());
+                if(client != null) {
+                    println("\n=== CLIENT DETAILS ===");
+                    println("Client Name: " + client.getFirstName() + " " + client.getFamilyName().orElse("[No family name]"));
+                    println("Client Email: " + client.getEmail());
+                }
+            } else {
+                println("Incident with ID " + incidentId + " not found.");
+            }
+        }
+    }
+
 }
