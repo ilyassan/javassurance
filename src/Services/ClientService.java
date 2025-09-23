@@ -70,4 +70,10 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
+    public static List<Client> getClientsByAdvisorId(int advisorId) {
+        return getAllOrderedByFamilyName().stream()
+                .filter(client -> client.getAdvisorId().equals(advisorId))
+                .collect(Collectors.toList());
+    }
+
 }
