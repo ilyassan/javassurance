@@ -46,6 +46,10 @@ public class ContractService {
         }
     }
 
+    public static List<Contract> getAll() {
+        return Contract.getAll();
+    }
+
     public static List<Contract> getContractsByClientId(int clientId) {
         return Contract.getByClientId(clientId);
     }

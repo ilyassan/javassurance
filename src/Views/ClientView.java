@@ -13,7 +13,8 @@ public class ClientView extends View {
         println("2. Search Client by ID");
         println("3. Delete Client by ID");
         println("4. Show All Clients (Ordered by Family Name)");
-        println("5. Back to Main Menu");
+        println("5. Show All Clients that have an incident cost larger than a specific cost");
+        println("6. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -109,6 +110,26 @@ public class ClientView extends View {
                 pauseBeforeMenu();
                 break;
             case 5:
+                print("Enter the cost treshold: ");
+                int cost = getIntInput();
+
+                println("\n=== ALL CLIENTS ===");
+                ClientService.getClientsHaveIncidentsLargerThan(cost).stream()
+                        .forEach(client -> {
+                            println("--------------------");
+                            println("ID: " + client.getId());
+                            println("First Name: " + client.getFirstName());
+                            println(client.getFamilyName()
+                                    .map(name -> "Family Name: " + name)
+                                    .orElse("Family Name: Not provided"));
+                            println("Email: " + client.getEmail());
+                            println("Advisor ID: " + client.getAdvisorId());
+                        });
+                println("--------------------");
+
+                pauseBeforeMenu();
+                return;
+            case 6:
                 return;
             default:
                 println("Invalid choice");

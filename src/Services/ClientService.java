@@ -1,6 +1,9 @@
 package Services;
 
 import Models.Client;
+import Models.Contract;
+import Models.Incident;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -48,4 +51,23 @@ public class ClientService {
                     client.getFamilyName().orElse("ZZZ")))
                 .collect(Collectors.toList());
     }
+
+    public static List<Client> getClientsHaveIncidentsLargerThan(double threshold) {
+        List<Incident> incidents = IncidentService.getAll();
+        List<Contract> contracts = ContractService.getAll();
+
+        return getAllOrderedByFamilyName().stream()
+                .filter(client -> {
+                    List<Integer> clientContractIds = contracts.stream()
+                            .filter(contract -> contract.getClientId().equals(client.getId()))
+                            .map(Contract::getId)
+                            .collect(Collectors.toList());
+
+                    return incidents.stream().anyMatch(incident ->
+                            clientContractIds.contains(incident.getContractId()) &&
+                                    incident.getCost() >= threshold);
+                })
+                .collect(Collectors.toList());
+    }
+
 }
