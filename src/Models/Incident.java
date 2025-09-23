@@ -6,6 +6,8 @@ import Enums.IncidentType;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Incident extends Model {
     public Integer id;
@@ -115,6 +117,28 @@ public class Incident extends Model {
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
+        });
+    }
+
+    public static List<Incident> getAll() {
+        String sql = "SELECT * FROM incidents";
+
+        return withStatement(sql, stmt -> {
+            ResultSet rs = stmt.executeQuery();
+            List<Incident> incidents = new ArrayList<>();
+            while (rs.next()) {
+                incidents.add(
+                        new Incident(
+                            rs.getInt("id"),
+                            IncidentType.valueOf(rs.getString("type")),
+                            rs.getDate("date").toLocalDate(),
+                            rs.getString("description"),
+                            rs.getInt("cost"),
+                            rs.getInt("contract_id")
+                    )
+                );
+            }
+            return incidents;
         });
     }
 }

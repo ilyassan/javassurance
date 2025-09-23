@@ -11,6 +11,8 @@ import Services.IncidentService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class IncidentView extends View {
 
@@ -19,6 +21,7 @@ public class IncidentView extends View {
         println("1. Create Incident");
         println("2. Search Incident by ID");
         println("3. Delete Incident by ID");
+        println("4. Total cost of Incidents of a client");
         println("5. Back to Main Menu");
         print("Enter your choice: ");
 
@@ -38,6 +41,7 @@ public class IncidentView extends View {
                 pauseBeforeMenu();
                 break;
             case 4:
+                incidentsTotalCostOfClient();
                 pauseBeforeMenu();
                 break;
             case 5:
@@ -203,6 +207,51 @@ public class IncidentView extends View {
             }
         } else {
             println("Contract with ID " + deleteIncidentId + " not found.");
+        }
+    }
+
+    private static void incidentsTotalCostOfClient() {
+        Client client = selectClient();
+        List<Integer> contractIds = ContractService.getContractsByClientId(client.getId())
+                                    .stream().map(contract -> contract.getId())
+                                    .collect(Collectors.toList());
+
+        double totalCost = IncidentService.getAll().stream()
+                .filter(incident -> contractIds.contains(incident.getContractId()))
+                .mapToDouble(incident -> incident.cost)
+                .sum();
+
+        print("Total cost: " + totalCost);
+    }
+
+    private static Client selectClient() {
+        List<Client> clients = ClientService.getAllOrderedByFamilyName();
+
+        if (clients.isEmpty()) {
+            println("No clients found. Please create a client first.");
+            return null;
+        }
+
+        println("\n=== SELECT CLIENT ===");
+        for (int i = 1; i <= clients.size(); i++) {
+            Client client = clients.get(i - 1);
+            System.out.printf(
+                    "%d - %s %s (ID: %d)\n",
+                    i,
+                    client.getFirstName(),
+                    client.getFamilyName().orElse("[No family name]"),
+                    client.getId()
+            );
+        }
+
+        print("Select a client: ");
+        int choice = getIntInput();
+
+        if (choice >= 1 && choice <= clients.size()) {
+            return clients.get(choice - 1);
+        } else {
+            println("Invalid selection.");
+            return null;
         }
     }
 

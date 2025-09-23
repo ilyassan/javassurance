@@ -5,6 +5,7 @@ import Models.Contract;
 import Models.Incident;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class IncidentService {
     public static void create(IncidentType type, LocalDate date, String description, Integer cost, Integer contractId) {
@@ -40,4 +41,7 @@ public class IncidentService {
         }
     }
 
+    public static List<Incident> getAll() {
+        return Incident.getAll();
+    }
 }
