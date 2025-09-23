@@ -18,6 +18,7 @@ public class Incident extends Model {
     public Integer contractId;
 
     public Incident(Integer id, IncidentType type, LocalDate date, String description, double cost, Integer contractId) {
+        this.id = id;
         this.type = type;
         this.date = date;
         this.cost = cost;

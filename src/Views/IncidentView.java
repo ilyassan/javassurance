@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class IncidentView extends View {
 
@@ -22,7 +21,8 @@ public class IncidentView extends View {
         println("2. Search Incident by ID");
         println("3. Delete Incident by ID");
         println("4. Total cost of Incidents of a client");
-        println("5. Back to Main Menu");
+        println("5. Show incidents of a specefic contract");
+        println("6. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -45,6 +45,10 @@ public class IncidentView extends View {
                 pauseBeforeMenu();
                 break;
             case 5:
+                showIncidentsOfContract();
+                pauseBeforeMenu();
+                break;
+            case 6:
                 return;
             default:
                 println("Invalid choice");
@@ -222,6 +226,22 @@ public class IncidentView extends View {
                 .sum();
 
         print("Total cost: " + totalCost);
+    }
+
+    public static void showIncidentsOfContract() {
+        Contract contract = selectContract();
+
+        println("\n================");
+        IncidentService.getAll().stream()
+                .filter(incident -> incident.getContractId().equals(contract.getId()))
+                .forEach(incident -> {
+                    println("ID: " + incident.getId());
+                    println("Type: " + incident.getType().name());
+                    println("Date: " + incident.getDate());
+                    println("Description: " + incident.getDescription());
+                    println("Cost: " + incident.getCost());
+                    println("\n================");
+                });
     }
 
     private static Client selectClient() {
