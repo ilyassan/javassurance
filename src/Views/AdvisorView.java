@@ -12,8 +12,9 @@ public class AdvisorView extends View {
     public static void showMenu() {
         println("\n=== ADVISORS MANAGEMENT ===");
         println("1. Create Advisor");
-        println("2. Show All Clients of an Advisor");
-        println("3. Back to Main Menu");
+        println("2. Search Advisor by ID");
+        println("3. Show All Clients of an Advisor");
+        println("4. Back to Main Menu");
         print("Enter your choice: ");
 
         int choice = getIntInput();
@@ -33,10 +34,14 @@ public class AdvisorView extends View {
                 pauseBeforeMenu();
                 break;
             case 2:
-                showClientsOfAdvisor();
+                searchAdvisorById();
                 pauseBeforeMenu();
                 break;
             case 3:
+                showClientsOfAdvisor();
+                pauseBeforeMenu();
+                break;
+            case 4:
                 return;
             default:
                 println("Invalid choice");
@@ -97,6 +102,25 @@ public class AdvisorView extends View {
             });
             println("--------------------");
             println("Total clients: " + clients.size());
+        }
+    }
+
+    public static void searchAdvisorById() {
+        print("Enter advisor ID: ");
+        int advisorId = getIntInput();
+
+        if (advisorId != -1) {
+            Advisor advisor = AdvisorService.findById(advisorId);
+
+            if (advisor != null) {
+                println("\n=== ADVISOR FOUND ===");
+                println("ID: " + advisor.getId());
+                println("First Name: " + advisor.getFirstName());
+                println("Last Name: " + advisor.getLastName());
+                println("Email: " + advisor.getEmail());
+            } else {
+                println("Advisor with ID " + advisorId + " not found.");
+            }
         }
     }
 }

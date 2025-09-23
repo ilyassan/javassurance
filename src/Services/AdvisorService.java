@@ -19,4 +19,8 @@ public class AdvisorService {
         Advisor advisor = new Advisor(null, firstName, lastName, email);
         advisor.create();
     }
+
+    public static Advisor findById(int id) {
+        return Advisor.find(id);
+    }
 }
