@@ -1,6 +1,6 @@
 package Models;
 
-public abstract class Person extends Model {
+public abstract class Person {
     public Integer id;
     public String firstName;
     public String lastName;

@@ -123,8 +123,8 @@ public class IncidentView extends View {
     }
 
     private static Contract selectContract() {
-        List<Contract> contracts = Contract.getAll();
-        List<Client> clients = Client.getAll();
+        List<Contract> contracts = ContractService.getAll();
+        List<Client> clients = ClientService.getAllOrderedByFamilyName();
 
         if (contracts.isEmpty()) {
             println("No contracts found. Please create a contract first.");

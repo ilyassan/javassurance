@@ -1,15 +1,10 @@
-package Models;
+package DAO;
 
 import Database.DB;
-
 import java.sql.*;
 
-public abstract class Model {
+public abstract class DAO {
     protected static final DB db = DB.getInstance();
-
-    protected Connection conn() throws SQLException {
-        return db.getConnection();
-    }
 
     public static interface StatementExecutor<T> {
         T apply(PreparedStatement stmt) throws SQLException;

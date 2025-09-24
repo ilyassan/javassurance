@@ -1,13 +1,9 @@
 package Models;
 
 import Enums.ContractType;
-import java.sql.Date;
-import java.sql.ResultSet;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Contract extends Model {
+public class Contract {
     public Integer id;
     public ContractType type;
     public LocalDate startDate;
@@ -56,96 +52,5 @@ public class Contract extends Model {
 
     public void setClientId(Integer clientId) {
         this.clientId = clientId;
-    }
-
-    public void create() {
-        String sql = "INSERT INTO contracts (type, start_date, end_date, client_id) VALUES (?, ?, ?, ?)";
-
-        this.id = withStatementReturning(sql, stmt -> {
-            stmt.setString(1, this.type.name());
-            stmt.setDate(2, Date.valueOf(this.startDate));
-            if (this.endDate != null) {
-                stmt.setDate(3, Date.valueOf(this.endDate));
-            } else {
-                stmt.setDate(3, null);
-            }
-            stmt.setInt(4, this.clientId);
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return null;
-        });
-    }
-
-    public static Contract find(int id) {
-        String sql = "SELECT * FROM contracts WHERE id = ?";
-
-        return withStatement(sql, stmt -> {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Contract(
-                        rs.getInt("id"),
-                        ContractType.valueOf(rs.getString("type")),
-                        rs.getDate("start_date").toLocalDate(),
-                        rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null,
-                        rs.getInt("client_id")
-                );
-            } else {
-                return null;
-            }
-        });
-    }
-
-    public static boolean delete(int id) {
-        String sql = "DELETE FROM contracts WHERE id = ?";
-
-        return withStatement(sql, stmt -> {
-            stmt.setInt(1, id);
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-        });
-    }
-
-    public static List<Contract> getByClientId(int clientId) {
-        String sql = "SELECT * FROM contracts WHERE client_id = ? ORDER BY start_date DESC";
-
-        return withStatement(sql, stmt -> {
-            stmt.setInt(1, clientId);
-            ResultSet rs = stmt.executeQuery();
-            List<Contract> contracts = new ArrayList<>();
-            while (rs.next()) {
-                contracts.add(new Contract(
-                        rs.getInt("id"),
-                        ContractType.valueOf(rs.getString("type")),
-                        rs.getDate("start_date").toLocalDate(),
-                        rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null,
-                        rs.getInt("client_id")
-                ));
-            }
-            return contracts;
-        });
-    }
-
-    public static List<Contract> getAll() {
-        String sql = "SELECT * FROM contracts";
-
-        return withStatement(sql, stmt -> {
-            ResultSet rs = stmt.executeQuery();
-            List<Contract> contracts = new ArrayList<>();
-            while (rs.next()) {
-                contracts.add(new Contract(
-                        rs.getInt("id"),
-                        ContractType.valueOf(rs.getString("type")),
-                        rs.getDate("start_date").toLocalDate(),
-                        rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null,
-                        rs.getInt("client_id")
-                ));
-            }
-            return contracts;
-        });
     }
 }

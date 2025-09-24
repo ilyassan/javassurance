@@ -54,7 +54,7 @@ public class AdvisorView extends View {
     }
 
     public static Advisor selectAdvisor() {
-        List<Advisor> advisors = Advisor.getAll();
+        List<Advisor> advisors = AdvisorService.getAll();
 
         if (advisors.isEmpty()) {
             println("No Advisors found. Please create an advisor first.");

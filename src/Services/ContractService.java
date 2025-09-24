@@ -1,11 +1,13 @@
 package Services;
 
+import DAO.ContractDAO;
 import Enums.ContractType;
 import Models.Contract;
 import java.time.LocalDate;
 import java.util.List;
 
 public class ContractService {
+    private static final ContractDAO contractDAO = new ContractDAO();
 
     public static void create(ContractType type, LocalDate startDate, LocalDate endDate, Integer clientId) {
         // validate the contract information
@@ -29,17 +31,18 @@ public class ContractService {
         }
 
         Contract contract = new Contract(null, type, startDate, endDate, clientId);
-        contract.create();
+        Integer generatedId = contractDAO.save(contract);
+        contract.id = generatedId;
     }
 
     public static Contract findById(int id) {
-        return Contract.find(id);
+        return contractDAO.findById(id);
     }
 
     public static boolean deleteById(int id) {
-        Contract contract = Contract.find(id);
+        Contract contract = contractDAO.findById(id);
         if (contract != null) {
-            return Contract.delete(id);
+            return contractDAO.deleteById(id);
         } else {
             System.out.println("Contract with ID " + id + " not found.");
             return false;
@@ -47,10 +50,10 @@ public class ContractService {
     }
 
     public static List<Contract> getAll() {
-        return Contract.getAll();
+        return contractDAO.findAll();
     }
 
     public static List<Contract> getContractsByClientId(int clientId) {
-        return Contract.getByClientId(clientId);
+        return contractDAO.findByClientId(clientId);
     }
 }
